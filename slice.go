@@ -1,4 +1,4 @@
-package golangCommonFuncs
+package gofuncs
 
 func Pop[K comparable, V any](m map[K]V, key K) V {
 	value := m[key]

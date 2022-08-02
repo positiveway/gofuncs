@@ -1,4 +1,4 @@
-package golangCommonFuncs
+package gofuncs
 
 import (
 	"github.com/jinzhu/copier"
