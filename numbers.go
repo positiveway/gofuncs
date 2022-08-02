@@ -20,8 +20,8 @@ func IsNegative[T SignedNumber](val T) bool {
 	return math.Signbit(Float(val))
 }
 
-func SignAsNumber[T SignedNumber](val T) T {
-	res := T(1)
+func SignAsNumber[T SignedNumber](val T) int {
+	res := 1
 	if IsNegative(val) {
 		res *= -1
 	}
