@@ -12,7 +12,7 @@ func Format(message Str, variables ...any) Str {
 		message = RemoveLastLetters(message, 1)
 	}
 	if !(StartsWith(message, "\n") || EndsWith(message, "\n")) {
-		message = "\n" + message
+		message += "\n"
 	}
 	return fmt.Sprintf(message, variables...)
 }
