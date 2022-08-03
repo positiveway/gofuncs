@@ -11,8 +11,8 @@ func Format(message Str, variables ...any) Str {
 		}
 		message = RemoveLastLetters(message, 1)
 	}
-	if !EndsWith(message, "\n") {
-		message += "\n"
+	if !(StartsWith(message, "\n") || EndsWith(message, "\n")) {
+		message = "\n" + message
 	}
 	return fmt.Sprintf(message, variables...)
 }
