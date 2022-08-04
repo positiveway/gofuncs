@@ -1,5 +1,6 @@
 username="positiveway"
 repository="gofuncs"
+
 #sudo rm -rf ~/go/pkg/mod/github.com/$username
 #sudo rm -rf ~/go/pkg/mod/cache/download/github.com/$username
 

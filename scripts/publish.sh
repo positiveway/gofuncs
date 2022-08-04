@@ -1,3 +1,7 @@
-cd ..
 ver="0.1.10"
-go list -m github.com/positiveway/gofuncs@v$ver
+
+username="positiveway"
+repository="gofuncs"
+
+cd ..
+go list -m github.com/$username/$repository@v$ver
