@@ -12,6 +12,16 @@ func IsPositive[T Number](value T) bool {
 	return value > 0
 }
 
+func IsNotPositive[T Number](value T) bool {
+	return !IsPositive(value)
+}
+
+func PanicAnyNotPositive[T Number](values ...T) {
+	if value, found := IsAnyPredicate(values, IsNotPositive[T]); found {
+		Panic("Only positive numbers are allowed: %v", value)
+	}
+}
+
 func Abs[T SignedNumber](val T) T {
 	return T(math.Abs(Float(val)))
 }

@@ -17,7 +17,8 @@ func IsNotInit(value any) bool {
 }
 
 func AnyNotInit(values ...any) bool {
-	return IsAnyPredicate(values, IsNotInit)
+	_, found := IsAnyPredicate(values, IsNotInit)
+	return found
 }
 
 func PanicNotInit() {
@@ -30,13 +31,13 @@ func PanicAnyNotInit(values ...any) {
 	}
 }
 
-func IsAnyPredicate[T any](values []T, predicate func(value T) bool) bool {
+func IsAnyPredicate[T any](values []T, predicate func(value T) bool) (T, bool) {
 	for _, value := range values {
 		if predicate(value) {
-			return true
+			return value, true
 		}
 	}
-	return false
+	return nil, false
 }
 
 func AnyCmp[T Number](pairs [][]T, cmp func(val1, val2 T) bool) bool {
