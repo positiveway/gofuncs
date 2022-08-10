@@ -37,7 +37,8 @@ func IsAnyPredicate[T any](values []T, predicate func(value T) bool) (T, bool) {
 			return value, true
 		}
 	}
-	return nil, false
+	var emptyRes T
+	return emptyRes, false
 }
 
 func AnyCmp[T Number](pairs [][]T, cmp func(val1, val2 T) bool) bool {
