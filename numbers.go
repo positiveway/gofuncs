@@ -30,12 +30,19 @@ func IsNegative[T SignedNumber](val T) bool {
 	return math.Signbit(Float(val))
 }
 
-func SignAsNumber[T SignedNumber](val T) int {
+func SignAsInt[T SignedNumber](val T) int {
+	if IsNotInit(val) || val == 0 {
+		return 0
+	}
 	res := 1
 	if IsNegative(val) {
 		res *= -1
 	}
 	return res
+}
+
+func SignAsNumber[T SignedNumber](val T) T {
+	return T(SignAsInt(val))
 }
 
 func ApplySign[T SignedNumber](isNegative bool, val T) T {

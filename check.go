@@ -8,7 +8,7 @@ func IsNotInit(value any) bool {
 		return math.IsNaN(v)
 	case Str:
 		return v == ""
-	case int, int32, int64:
+	case int, int8, int16, int32, int64:
 		return v == NanUInt
 	default:
 		Panic("Type is not supported")
