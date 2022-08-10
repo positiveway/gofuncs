@@ -6,7 +6,7 @@ var PrintDebugInfo bool
 
 func Format(message Str, variables ...any) Str {
 	if IsNotInit(message) {
-		for i := 0; i <= len(variables); i++ {
+		for i := 0; i < len(variables); i++ {
 			message += "%v "
 		}
 		message = RemoveLastLetters(message, 1)
