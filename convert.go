@@ -21,6 +21,10 @@ func StrToIntToFloat(value Str) Float {
 	return Float(StrToInt(value))
 }
 
+func NumberToPct(value int) Float {
+	return float64(value) / 100
+}
+
 func StrToPct(value Str) Float {
 	return StrToIntToFloat(value) / 100
 }
