@@ -16,8 +16,29 @@ func IsNotInit(value any) bool {
 	return false
 }
 
+func IsEmpty(value any) bool {
+	switch v := value.(type) {
+	case float32, float64, int, int8, int16, int32, int64:
+		return v == 0
+	case Str:
+		return IsEmptyStripStr(v)
+	default:
+		Panic("Type is not supported")
+	}
+	return false
+}
+
+func IsNotInitOrEmpty(value any) bool {
+	return IsNotInit(value) || IsEmpty(value)
+}
+
 func AnyNotInit(values ...any) bool {
 	_, found := IsAnyPredicate(values, IsNotInit)
+	return found
+}
+
+func AnyNotInitOrEmpty(values ...any) bool {
+	_, found := IsAnyPredicate(values, IsNotInitOrEmpty)
 	return found
 }
 
