@@ -2,6 +2,7 @@ package gofuncs
 
 import (
 	"log"
+	"runtime/debug"
 )
 
 func GetPanicMsg(message []Str, defaultMsg Str) Str {
@@ -17,7 +18,7 @@ func GetPanicMsg(message []Str, defaultMsg Str) Str {
 }
 
 func Panic(message Str, variables ...any) {
-	log.Fatal(Format(message, variables...))
+	log.Fatal(Format(message, variables...) + string(debug.Stack()))
 }
 
 func PanicErr(err error) {
