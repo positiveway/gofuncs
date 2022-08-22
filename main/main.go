@@ -47,20 +47,26 @@ func IsNotInit(value any) bool {
 	return false
 }
 
-func Copy[T any](toValue, fromValue *T) {
-	err := copier.Copy(toValue, fromValue)
+func Copy[T any](value *T) *T {
+	copiedValue := new(T)
+
+	err := copier.Copy(copiedValue, value)
 	if err != nil {
 		panic("Copying failed")
 	}
+
+	return copiedValue
 }
 
 type STG string
 
 func main() {
 	var g, c *int
-	g = new(int)
 	c = new(int)
-	Copy(g, c)
+	*c = 5
+	g = Copy(c)
+	println(*g)
+
 	var b STG = "0"
 	print(IsNotInit(b))
 
