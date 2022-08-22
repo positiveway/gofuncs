@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/jinzhu/copier"
 	"log"
 	"math"
 	"reflect"
@@ -46,9 +47,20 @@ func IsNotInit(value any) bool {
 	return false
 }
 
+func Copy[T any](toValue, fromValue *T) {
+	err := copier.Copy(toValue, fromValue)
+	if err != nil {
+		panic("Copying failed")
+	}
+}
+
 type STG string
 
 func main() {
+	var g, c *int
+	g = new(int)
+	c = new(int)
+	Copy(g, c)
 	var b STG = "0"
 	print(IsNotInit(b))
 
