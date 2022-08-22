@@ -1,9 +1,12 @@
 package gofuncs
 
-import "math"
+import (
+	"math"
+	"reflect"
+)
 
-func PanicUnsupportedType() {
-	Panic("Type is not supported")
+func PanicUnsupportedType(value any) {
+	Panic("Type \"%s\" is not supported", reflect.TypeOf(value).String())
 }
 
 func IsNotInit(value any) bool {
@@ -15,7 +18,7 @@ func IsNotInit(value any) bool {
 	case Str:
 		return v == ""
 	default:
-		PanicUnsupportedType()
+		PanicUnsupportedType(value)
 	}
 	return false
 }
@@ -27,7 +30,7 @@ func IsEmpty(value any) bool {
 	case Str:
 		return IsEmptyStripStr(v)
 	default:
-		PanicUnsupportedType()
+		PanicUnsupportedType(value)
 	}
 	return false
 }
