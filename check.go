@@ -4,7 +4,9 @@ import "math"
 
 func IsNotInit(value any) bool {
 	switch v := value.(type) {
-	case Float:
+	case float32:
+		return math.IsNaN(float64(v))
+	case float64:
 		return math.IsNaN(v)
 	case Str:
 		return v == ""
@@ -27,16 +29,16 @@ func IsEmpty(value any) bool {
 }
 
 func IsNotInitOrEmpty(value any) bool {
-	return IsNotInit(value) || IsEmpty(value)
+	switch v := value.(type) {
+	case float32, float64:
+		return IsNotInit(v) || IsEmpty(v)
+	default:
+		return IsEmpty(v)
+	}
 }
 
 func AnyNotInit(values ...any) bool {
 	_, found := IsAnyPredicate(values, IsNotInit)
-	return found
-}
-
-func AnyNotInitOrEmpty(values ...any) bool {
-	_, found := IsAnyPredicate(values, IsNotInitOrEmpty)
 	return found
 }
 
@@ -45,8 +47,27 @@ func AnyIsEmpty(values ...any) bool {
 	return found
 }
 
+func AnyNotInitOrEmpty(values ...any) bool {
+	_, found := IsAnyPredicate(values, IsNotInitOrEmpty)
+	return found
+}
+
+func PanicNotInit() {
+	Panic("Value is not initialized")
+}
+
 func PanicIsEmpty() {
 	Panic("Value is empty")
+}
+
+func PanicNotInitOrEmpty() {
+	Panic("Value is not initialized or is empty")
+}
+
+func PanicAnyNotInit(values ...any) {
+	if AnyNotInit(values...) {
+		PanicNotInit()
+	}
 }
 
 func PanicAnyIsEmpty(values ...any) {
@@ -55,13 +76,9 @@ func PanicAnyIsEmpty(values ...any) {
 	}
 }
 
-func PanicNotInit() {
-	Panic("Value is not initialized")
-}
-
-func PanicAnyNotInit(values ...any) {
-	if AnyNotInit(values...) {
-		PanicNotInit()
+func PanicAnyNotInitOrEmpty(values ...any) {
+	if AnyNotInitOrEmpty(values...) {
+		PanicNotInitOrEmpty()
 	}
 }
 

@@ -2,8 +2,6 @@ package gofuncs
 
 import "math"
 
-const NanUInt = -1
-
 func NaN() Float {
 	return math.NaN()
 }
