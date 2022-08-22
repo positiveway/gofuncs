@@ -18,7 +18,7 @@ func IsNotInit(value any) bool {
 	case Str:
 		return v == ""
 	default:
-		PanicUnsupportedType(value)
+		PanicUnsupportedType(v)
 	}
 	return false
 }
@@ -30,7 +30,7 @@ func IsEmpty(value any) bool {
 	case Str:
 		return IsEmptyStripStr(v)
 	default:
-		PanicUnsupportedType(value)
+		PanicUnsupportedType(v)
 	}
 	return false
 }
