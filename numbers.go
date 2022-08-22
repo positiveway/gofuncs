@@ -7,6 +7,7 @@ func NaN() Float {
 }
 
 func IsPositive[T Number](value T) bool {
+	// Nan > 0 is false
 	return value > 0
 }
 

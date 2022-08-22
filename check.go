@@ -2,6 +2,10 @@ package gofuncs
 
 import "math"
 
+func PanicUnsupportedType() {
+	Panic("Type is not supported")
+}
+
 func IsNotInit(value any) bool {
 	switch v := value.(type) {
 	case float32:
@@ -11,7 +15,7 @@ func IsNotInit(value any) bool {
 	case Str:
 		return v == ""
 	default:
-		Panic("Type is not supported")
+		PanicUnsupportedType()
 	}
 	return false
 }
@@ -23,7 +27,7 @@ func IsEmpty(value any) bool {
 	case Str:
 		return IsEmptyStripStr(v)
 	default:
-		Panic("Type is not supported")
+		PanicUnsupportedType()
 	}
 	return false
 }
