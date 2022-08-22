@@ -8,8 +8,6 @@ func IsNotInit(value any) bool {
 		return math.IsNaN(v)
 	case Str:
 		return v == ""
-	case int, int8, int16, int32, int64:
-		return v == NanUInt
 	default:
 		Panic("Type is not supported")
 	}
@@ -18,7 +16,7 @@ func IsNotInit(value any) bool {
 
 func IsEmpty(value any) bool {
 	switch v := value.(type) {
-	case float32, float64, int, int8, int16, int32, int64:
+	case float32, float64, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
 		return v == 0
 	case Str:
 		return IsEmptyStripStr(v)
@@ -40,6 +38,21 @@ func AnyNotInit(values ...any) bool {
 func AnyNotInitOrEmpty(values ...any) bool {
 	_, found := IsAnyPredicate(values, IsNotInitOrEmpty)
 	return found
+}
+
+func AnyIsEmpty(values ...any) bool {
+	_, found := IsAnyPredicate(values, IsEmpty)
+	return found
+}
+
+func PanicIsEmpty() {
+	Panic("Value is empty")
+}
+
+func PanicAnyIsEmpty(values ...any) {
+	if AnyIsEmpty(values...) {
+		PanicIsEmpty()
+	}
 }
 
 func PanicNotInit() {
