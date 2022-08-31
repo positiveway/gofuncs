@@ -28,7 +28,15 @@ func (m *Map[K, V]) Get(key K) V {
 	return value
 }
 
-func (m *Map[K, V]) RangeOverCopy(elementHandler func(key K, value V)) {
+func (m *Map[K, V]) RangeOverShallowCopy(elementHandler func(key K, value V)) {
+	copiedMap := ShallowCopyMap(m.mapping)
+
+	for k, v := range copiedMap {
+		elementHandler(k, v)
+	}
+}
+
+func (m *Map[K, V]) RangeOverDeepCopy(elementHandler func(key K, value V)) {
 	copiedMap := Copy(m.mapping)
 
 	for k, v := range copiedMap {
@@ -73,7 +81,19 @@ func (threadMap *ThreadSafeMap[K, V]) Get(key K) V {
 	return value
 }
 
-func (threadMap *ThreadSafeMap[K, V]) RangeOverCopy(elementHandler func(key K, value V)) {
+func (threadMap *ThreadSafeMap[K, V]) RangeOverShallowCopy(elementHandler func(key K, value V)) {
+	threadMap.mutex.Lock()
+
+	copiedMap := ShallowCopyMap(threadMap.mapping)
+
+	threadMap.mutex.Unlock()
+
+	for k, v := range copiedMap {
+		elementHandler(k, v)
+	}
+}
+
+func (threadMap *ThreadSafeMap[K, V]) RangeOverDeepCopy(elementHandler func(key K, value V)) {
 	threadMap.mutex.Lock()
 
 	copiedMap := Copy(threadMap.mapping)
