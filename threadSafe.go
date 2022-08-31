@@ -29,7 +29,7 @@ func (m *Map[K, V]) Get(key K) V {
 }
 
 func (m *Map[K, V]) RangeOverCopy(elementHandler func(key K, value V)) {
-	copiedMap := CopyMap(m.mapping)
+	copiedMap := Copy(m.mapping)
 
 	for k, v := range copiedMap {
 		elementHandler(k, v)
@@ -76,7 +76,7 @@ func (threadMap *ThreadSafeMap[K, V]) Get(key K) V {
 func (threadMap *ThreadSafeMap[K, V]) RangeOverCopy(elementHandler func(key K, value V)) {
 	threadMap.mutex.Lock()
 
-	copiedMap := CopyMap(threadMap.mapping)
+	copiedMap := Copy(threadMap.mapping)
 
 	threadMap.mutex.Unlock()
 

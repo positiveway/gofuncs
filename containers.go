@@ -48,14 +48,6 @@ func IsEmptyMap[K comparable, V any](seq map[K]V) bool {
 	return len(seq) == 0
 }
 
-func CopyMap[K comparable, V any](seq map[K]V) map[K]V {
-	copied := map[K]V{}
-	for key, val := range seq {
-		copied[key] = val
-	}
-	return copied
-}
-
 func LastElem[T any](seq []T) T {
 	CheckLengthSlice(seq, 1)
 	return seq[len(seq)-1]

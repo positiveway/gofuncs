@@ -6,11 +6,11 @@ func Swap[T any](value1, value2 *T) {
 	*value1, *value2 = *value2, *value1
 }
 
-func Copy[T any](value *T) *T {
+func Copy[T any](value T) T {
 	//Takes long time
-	copiedValue := new(T)
+	var copiedValue T
 
-	err := copier.Copy(copiedValue, value)
+	err := copier.Copy(&copiedValue, value)
 	if err != nil {
 		Panic("Copying failed")
 	}
