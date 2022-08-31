@@ -1,9 +1,46 @@
 package gofuncs
 
 import (
-	"github.com/jinzhu/copier"
 	"sync"
 )
+
+type Map[K comparable, V any] struct {
+	mapping map[K]V
+}
+
+func MakeMap[K comparable, V any]() *Map[K, V] {
+	return &Map[K, V]{
+		mapping: map[K]V{},
+	}
+}
+
+func (m *Map[K, V]) Put(key K, value V) {
+	m.mapping[key] = value
+}
+
+func (m *Map[K, V]) CheckAndGet(key K) (V, bool) {
+	value, present := m.mapping[key]
+	return value, present
+}
+
+func (m *Map[K, V]) Get(key K) V {
+	value, _ := m.CheckAndGet(key)
+	return value
+}
+
+func (m *Map[K, V]) RangeOverCopy(elementHandler func(key K, value V)) {
+	copiedMap := CopyMap(m.mapping)
+
+	for k, v := range copiedMap {
+		elementHandler(k, v)
+	}
+}
+
+func (m *Map[K, V]) Pop(key K) V {
+	value := m.mapping[key]
+	delete(m.mapping, key)
+	return value
+}
 
 type ThreadSafeMap[K comparable, V any] struct {
 	mapping map[K]V
@@ -11,9 +48,9 @@ type ThreadSafeMap[K comparable, V any] struct {
 }
 
 func MakeThreadSafeMap[K comparable, V any]() *ThreadSafeMap[K, V] {
-	tsMap := &ThreadSafeMap[K, V]{}
-	tsMap.mapping = map[K]V{}
-	return tsMap
+	return &ThreadSafeMap[K, V]{
+		mapping: map[K]V{},
+	}
 }
 
 func (threadMap *ThreadSafeMap[K, V]) Put(key K, value V) {
@@ -39,11 +76,7 @@ func (threadMap *ThreadSafeMap[K, V]) Get(key K) V {
 func (threadMap *ThreadSafeMap[K, V]) RangeOverCopy(elementHandler func(key K, value V)) {
 	threadMap.mutex.Lock()
 
-	copiedMap := map[K]V{}
-	err := copier.Copy(&copiedMap, &(threadMap.mapping))
-	if err != nil {
-		Panic("", err)
-	}
+	copiedMap := CopyMap(threadMap.mapping)
 
 	threadMap.mutex.Unlock()
 

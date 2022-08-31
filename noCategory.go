@@ -7,6 +7,7 @@ func Swap[T any](value1, value2 *T) {
 }
 
 func Copy[T any](value *T) *T {
+	//Takes long time
 	copiedValue := new(T)
 
 	err := copier.Copy(copiedValue, value)
