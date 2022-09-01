@@ -89,14 +89,6 @@ func PanicAnyNotInitOrEmpty[T BasicType](values ...T) {
 	}
 }
 
-func ConvertToAnyTypeSeq[T BasicType](values ...T) []any {
-	var convertedSeq []any
-	for _, value := range values {
-		convertedSeq = append(convertedSeq, ToEmptyInterface(value))
-	}
-	return convertedSeq
-}
-
 func IsAnyPredicate[T BasicType](values []T, predicate func(value T) bool) (T, bool) {
 	for _, value := range values {
 		if predicate(value) {

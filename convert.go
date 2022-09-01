@@ -10,6 +10,14 @@ func ToEmptyInterface[T BasicType](value T) any {
 	return emptyInterface
 }
 
+func ConvertToAnyTypeSeq[T BasicType](values ...T) []any {
+	var convertedSeq []any
+	for _, value := range values {
+		convertedSeq = append(convertedSeq, ToEmptyInterface(value))
+	}
+	return convertedSeq
+}
+
 func StrToBool(value string) bool {
 	res, err := strconv.ParseBool(value)
 	CheckErr(err)
