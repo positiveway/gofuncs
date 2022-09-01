@@ -47,7 +47,7 @@ func ReadFileStr(elem ...string) string {
 	return ReadFile[string](elem...)
 }
 
-func ReadJson(res interface{}, elem ...string) {
+func ReadJson(res interface{}, elem []string) {
 	filePath := JoinPathCheckIfExists(elem...)
 
 	if !EndsWith(filePath, ".json") {
@@ -69,7 +69,7 @@ func ReadLines(elem ...string) []string {
 	return Split(content, "\n")
 }
 
-func ReadLayoutFile(skipLines int, elem ...string) [][]string {
+func ReadLayoutFile(skipLines int, elem []string) [][]string {
 	lines := ReadLines(elem...)
 	lines = lines[skipLines:]
 
