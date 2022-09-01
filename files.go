@@ -1,16 +1,52 @@
 package gofuncs
 
 import (
+	"bytes"
+	"encoding/json"
+	"io"
 	"os"
+	"path/filepath"
 )
 
-func ReadFile(file Str) Str {
-	data, err := os.ReadFile(file)
+func GetCurFileDir() string {
+	execPath, err := os.Executable()
 	CheckErr(err)
-	return Str(data)
+
+	execPath, err = filepath.EvalSymlinks(execPath)
+	CheckErr(err)
+
+	dirPath := filepath.Dir(execPath)
+	return dirPath
 }
 
-func ReadLines(file Str) []Str {
-	content := ReadFile(file)
+type Bytes = []byte
+
+type EncodingT interface {
+	Bytes | string
+}
+
+func ReadFile[T EncodingT](filePath string) T {
+	data, err := os.ReadFile(filePath)
+	CheckErr(err)
+	return T(data)
+}
+
+func ReadJson(filePath string, res interface{}) {
+	if !EndsWith(filePath, ".json") {
+		Panic("Invalid file extension")
+	}
+	rawContent := ReadFile[Bytes](filePath)
+	dec := json.NewDecoder(bytes.NewReader(rawContent))
+	for {
+		if err := dec.Decode(res); err == io.EOF {
+			break
+		} else {
+			CheckErr(err)
+		}
+	}
+}
+
+func ReadLines(file string) []string {
+	content := ReadFile[string](file)
 	return Split(content, "\n")
 }

@@ -4,7 +4,7 @@ import "fmt"
 
 var PrintDebugInfo bool
 
-func Format(message Str, variables ...any) Str {
+func Format(message string, variables ...any) string {
 	if IsNotInit(message) {
 		for i := 0; i < len(variables); i++ {
 			message += "%v "
@@ -17,11 +17,11 @@ func Format(message Str, variables ...any) Str {
 	return fmt.Sprintf(message, variables...)
 }
 
-func Print(message Str, variables ...any) {
+func Print(message string, variables ...any) {
 	fmt.Print(Format(message, variables...))
 }
 
-func PrintDebug(message Str, variables ...any) {
+func PrintDebug(message string, variables ...any) {
 	if PrintDebugInfo {
 		Print(message, variables...)
 	}

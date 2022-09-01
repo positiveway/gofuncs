@@ -15,7 +15,7 @@ func IsNotInit(value any) bool {
 		return math.IsNaN(float64(v))
 	case float64:
 		return math.IsNaN(v)
-	case Str:
+	case string:
 		return v == ""
 	default:
 		PanicUnsupportedType(v)
@@ -27,7 +27,7 @@ func IsEmpty(value any) bool {
 	switch v := value.(type) {
 	case float32, float64, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
 		return v == 0
-	case Str:
+	case string:
 		return IsEmptyStripStr(v)
 	default:
 		PanicUnsupportedType(v)

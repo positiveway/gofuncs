@@ -21,7 +21,7 @@ func GetOrDefault[K comparable, V any](m map[K]V, key K, defaultVal V) V {
 	}
 }
 
-func GetOrPanic[K comparable, V any](m map[K]V, key K, msg ...Str) V {
+func GetOrPanic[K comparable, V any](m map[K]V, key K, msg ...string) V {
 	if val, found := m[key]; found {
 		return val
 	}

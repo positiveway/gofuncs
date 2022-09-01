@@ -5,7 +5,7 @@ import (
 	"runtime/debug"
 )
 
-func GetPanicMsg(message []Str, defaultMsg Str) Str {
+func GetPanicMsg(message []string, defaultMsg string) string {
 	switch len(message) {
 	case 0:
 		return defaultMsg
@@ -17,7 +17,7 @@ func GetPanicMsg(message []Str, defaultMsg Str) Str {
 	panic("")
 }
 
-func Panic(message Str, variables ...any) {
+func Panic(message string, variables ...any) {
 	log.Fatal(Format(message, variables...) + string(debug.Stack()))
 }
 

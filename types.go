@@ -1,7 +1,5 @@
 package gofuncs
 
-type Str = string
-
 type SignedInt interface {
 	int | int8 | int16 | int32 | int64
 }
@@ -29,5 +27,5 @@ type Number interface {
 }
 
 type BasicType interface {
-	Number | Str | bool | rune
+	Number | string | bool | rune
 }

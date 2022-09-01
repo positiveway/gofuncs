@@ -4,19 +4,19 @@ import (
 	"strings"
 )
 
-func RemoveLastLetters(sourceStr Str, numLettersToRemove int) Str {
+func RemoveLastLetters(sourceStr string, numLettersToRemove int) string {
 	return sourceStr[:len(sourceStr)-numLettersToRemove]
 }
 
-func RemoveFirstLetters(sourceStr Str, numLettersToRemove int) Str {
+func RemoveFirstLetters(sourceStr string, numLettersToRemove int) string {
 	return sourceStr[numLettersToRemove:]
 }
 
-func SplitByAnyOf(sourceStr Str, separators Str) []Str {
+func SplitByAnyOf(sourceStr string, separators string) []string {
 	if separators == "" {
 		Panic("Empty separator")
 	}
-	var res []Str
+	var res []string
 	prevSplitInd := 0
 	for ind, symbol := range sourceStr {
 		if strings.ContainsRune(separators, symbol) {
@@ -29,15 +29,15 @@ func SplitByAnyOf(sourceStr Str, separators Str) []Str {
 	return res
 }
 
-func StartsWith(s Str, prefix Str) bool {
+func StartsWith(s string, prefix string) bool {
 	return strings.HasPrefix(s, prefix)
 }
 
-func EndsWith(s Str, suffix Str) bool {
+func EndsWith(s string, suffix string) bool {
 	return strings.HasSuffix(s, suffix)
 }
 
-func StartsWithAnyOf(s Str, prefixes ...Str) bool {
+func StartsWithAnyOf(s string, prefixes ...string) bool {
 	for _, prefix := range prefixes {
 		if StartsWith(s, prefix) {
 			return true
@@ -46,7 +46,7 @@ func StartsWithAnyOf(s Str, prefixes ...Str) bool {
 	return false
 }
 
-func EndsWithAnyOf(s Str, suffixes ...Str) bool {
+func EndsWithAnyOf(s string, suffixes ...string) bool {
 	for _, suffix := range suffixes {
 		if EndsWith(s, suffix) {
 			return true
@@ -55,7 +55,7 @@ func EndsWithAnyOf(s Str, suffixes ...Str) bool {
 	return false
 }
 
-func TrimAnyPrefix(s Str, prefixes ...Str) Str {
+func TrimAnyPrefix(s string, prefixes ...string) string {
 	for _, prefix := range prefixes {
 		if StartsWith(s, prefix) {
 			return strings.TrimPrefix(s, prefix)
@@ -64,12 +64,12 @@ func TrimAnyPrefix(s Str, prefixes ...Str) Str {
 	return s
 }
 
-func Strip(s Str) Str {
+func Strip(s string) string {
 	return strings.TrimSpace(s)
 }
 
-func FilterEmptyStrings(slice []Str) []Str {
-	var filtered []Str
+func FilterEmptyStrings(slice []string) []string {
+	var filtered []string
 	for _, s := range slice {
 		if !IsEmptyStripStr(s) {
 			filtered = append(filtered, s)
@@ -78,10 +78,10 @@ func FilterEmptyStrings(slice []Str) []Str {
 	return filtered
 }
 
-func Split(s Str, sep ...Str) []Str {
+func Split(s string, sep ...string) []string {
 	PanicIfEmptyStripStr(s)
 
-	separator := func(separator []Str) Str {
+	separator := func(separator []string) string {
 		switch len(separator) {
 		case 0:
 			return ""
@@ -98,29 +98,29 @@ func Split(s Str, sep ...Str) []Str {
 	return res
 }
 
-func Words(s Str) []Str {
+func Words(s string) []string {
 	return Split(s)
 }
 
-func FirstWord(s Str) Str {
+func FirstWord(s string) string {
 	return Words(s)[0]
 }
 
-func LastWord(s Str) Str {
+func LastWord(s string) string {
 	return LastElem(Words(s))
 }
 
-func IsEmptyStripStr(s Str) bool {
+func IsEmptyStripStr(s string) bool {
 	return Strip(s) == ""
 }
 
-func PanicIfEmptyStripStr(s Str) {
+func PanicIfEmptyStripStr(s string) {
 	if IsEmptyStripStr(s) {
 		Panic("string is empty")
 	}
 }
 
-func StripOrPanicIfEmpty(s Str) Str {
+func StripOrPanicIfEmpty(s string) string {
 	s = Strip(s)
 	PanicAnyNotInit(s)
 	return s
