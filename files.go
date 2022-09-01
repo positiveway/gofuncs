@@ -25,6 +25,12 @@ type EncodingT interface {
 	Bytes | string
 }
 
+func CheckFileOrDirExists(filePath string) {
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		Panic("File or folder with such name doesn't exist: %s", filePath)
+	}
+}
+
 func ReadFile[T EncodingT](filePath string) T {
 	data, err := os.ReadFile(filePath)
 	CheckErr(err)
