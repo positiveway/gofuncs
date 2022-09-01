@@ -37,13 +37,19 @@ func JoinPathCheckIfExists(elem ...string) string {
 	return filePath
 }
 
-func ReadFile[T EncodingT](filePath string) T {
-	data, err := os.ReadFile(filePath)
+func ReadFile[T EncodingT](elem ...string) T {
+	data, err := os.ReadFile(JoinPathCheckIfExists(elem...))
 	CheckErr(err)
 	return T(data)
 }
 
-func ReadJson(filePath string, res interface{}) {
+func ReadFileStr(elem ...string) string {
+	return ReadFile[string](elem...)
+}
+
+func ReadJson(res interface{}, elem ...string) {
+	filePath := JoinPathCheckIfExists(elem...)
+
 	if !EndsWith(filePath, ".json") {
 		Panic("Invalid file extension")
 	}
@@ -58,13 +64,13 @@ func ReadJson(filePath string, res interface{}) {
 	}
 }
 
-func ReadLines(file string) []string {
-	content := ReadFile[string](file)
+func ReadLines(elem ...string) []string {
+	content := ReadFileStr(elem...)
 	return Split(content, "\n")
 }
 
-func ReadLayoutFile(filePath string, skipLines int) [][]string {
-	lines := ReadLines(filePath)
+func ReadLayoutFile(skipLines int, elem ...string) [][]string {
+	lines := ReadLines(elem...)
 	lines = lines[skipLines:]
 
 	var linesParts [][]string
