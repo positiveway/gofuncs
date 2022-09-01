@@ -125,3 +125,11 @@ func StripOrPanicIfEmpty(s string) string {
 	PanicAnyNotInit(s)
 	return s
 }
+
+func ToLower(elem ...string) []string {
+	var lowered []string
+	for _, el := range elem {
+		lowered = append(lowered, strings.ToLower(el))
+	}
+	return lowered
+}
