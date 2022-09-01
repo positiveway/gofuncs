@@ -9,8 +9,8 @@ func PanicUnsupportedType(value any) {
 	Panic("Type \"%s\" is not supported", reflect.TypeOf(value).String())
 }
 
-func IsNotInit(value any) bool {
-	switch v := value.(type) {
+func IsNotInit[T BasicType](value T) bool {
+	switch v := ToEmptyInterface(value).(type) {
 	case float32:
 		return math.IsNaN(float64(v))
 	case float64:
@@ -23,8 +23,8 @@ func IsNotInit(value any) bool {
 	return false
 }
 
-func IsEmpty(value any) bool {
-	switch v := value.(type) {
+func IsEmpty[T BasicType](value T) bool {
+	switch v := ToEmptyInterface(value).(type) {
 	case float32, float64, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
 		return v == 0
 	case string:
@@ -35,27 +35,27 @@ func IsEmpty(value any) bool {
 	return false
 }
 
-func IsNotInitOrEmpty(value any) bool {
-	switch v := value.(type) {
+func IsNotInitOrEmpty[T BasicType](value T) bool {
+	switch ToEmptyInterface(value).(type) {
 	case float32, float64:
-		return IsNotInit(v) || IsEmpty(v)
+		return IsNotInit(value) || IsEmpty(value)
 	default:
-		return IsEmpty(v)
+		return IsEmpty(value)
 	}
 }
 
-func AnyNotInit(values ...any) bool {
-	_, found := IsAnyPredicate(values, IsNotInit)
+func AnyNotInit[T BasicType](values ...T) bool {
+	_, found := IsAnyPredicate(values, IsNotInit[T])
 	return found
 }
 
-func AnyIsEmpty(values ...any) bool {
-	_, found := IsAnyPredicate(values, IsEmpty)
+func AnyIsEmpty[T BasicType](values ...T) bool {
+	_, found := IsAnyPredicate(values, IsEmpty[T])
 	return found
 }
 
-func AnyNotInitOrEmpty(values ...any) bool {
-	_, found := IsAnyPredicate(values, IsNotInitOrEmpty)
+func AnyNotInitOrEmpty[T BasicType](values ...T) bool {
+	_, found := IsAnyPredicate(values, IsNotInitOrEmpty[T])
 	return found
 }
 
@@ -71,25 +71,33 @@ func PanicNotInitOrEmpty() {
 	Panic("Value is not initialized or is empty")
 }
 
-func PanicAnyNotInit(values ...any) {
+func PanicAnyNotInit[T BasicType](values ...T) {
 	if AnyNotInit(values...) {
 		PanicNotInit()
 	}
 }
 
-func PanicAnyIsEmpty(values ...any) {
+func PanicAnyIsEmpty[T BasicType](values ...T) {
 	if AnyIsEmpty(values...) {
 		PanicIsEmpty()
 	}
 }
 
-func PanicAnyNotInitOrEmpty(values ...any) {
+func PanicAnyNotInitOrEmpty[T BasicType](values ...T) {
 	if AnyNotInitOrEmpty(values...) {
 		PanicNotInitOrEmpty()
 	}
 }
 
-func IsAnyPredicate[T any](values []T, predicate func(value T) bool) (T, bool) {
+func ConvertToAnyTypeSeq[T BasicType](values ...T) []any {
+	var convertedSeq []any
+	for _, value := range values {
+		convertedSeq = append(convertedSeq, ToEmptyInterface(value))
+	}
+	return convertedSeq
+}
+
+func IsAnyPredicate[T BasicType](values []T, predicate func(value T) bool) (T, bool) {
 	for _, value := range values {
 		if predicate(value) {
 			return value, true

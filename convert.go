@@ -5,6 +5,11 @@ import (
 	"time"
 )
 
+func ToEmptyInterface[T BasicType](value T) any {
+	var emptyInterface interface{} = value
+	return emptyInterface
+}
+
 func StrToBool(value string) bool {
 	res, err := strconv.ParseBool(value)
 	CheckErr(err)
