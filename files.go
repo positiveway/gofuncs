@@ -31,6 +31,12 @@ func CheckFileOrDirExists(filePath string) {
 	}
 }
 
+func JoinPathCheckIfExists(elem ...string) string {
+	filePath := filepath.Join(elem...)
+	CheckFileOrDirExists(filePath)
+	return filePath
+}
+
 func ReadFile[T EncodingT](filePath string) T {
 	data, err := os.ReadFile(filePath)
 	CheckErr(err)
