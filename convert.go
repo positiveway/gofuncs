@@ -1,19 +1,41 @@
 package gofuncs
 
 import (
+	"reflect"
 	"strconv"
 	"time"
 )
+
+func GetTypeOfEmptyInterface(value any) string {
+	return reflect.TypeOf(value).String()
+}
 
 func ToEmptyInterface[T BasicType](value T) any {
 	var emptyInterface interface{} = value
 	return emptyInterface
 }
 
+func FromEmptyInterface[T BasicType](value any) T {
+	if converted, ok := value.(T); ok {
+		return converted
+	} else {
+		Panic("Conversion of type \"%s\" failed", GetTypeOfEmptyInterface(value))
+	}
+	panic("")
+}
+
 func ConvertToAnyTypeSeq[T BasicType](values ...T) []any {
 	var convertedSeq []any
 	for _, value := range values {
 		convertedSeq = append(convertedSeq, ToEmptyInterface(value))
+	}
+	return convertedSeq
+}
+
+func ConvertFromAnyTypeSeq[T BasicType](values ...any) []T {
+	var convertedSeq []T
+	for _, value := range values {
+		convertedSeq = append(convertedSeq, FromEmptyInterface[T](value))
 	}
 	return convertedSeq
 }

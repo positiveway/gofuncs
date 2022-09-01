@@ -2,11 +2,10 @@ package gofuncs
 
 import (
 	"math"
-	"reflect"
 )
 
 func PanicUnsupportedType(value any) {
-	Panic("Type \"%s\" is not supported", reflect.TypeOf(value).String())
+	Panic("Type \"%s\" is not supported", GetTypeOfEmptyInterface(value))
 }
 
 func IsNotInit[T BasicType](value T) bool {
