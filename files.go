@@ -62,3 +62,22 @@ func ReadLines(file string) []string {
 	content := ReadFile[string](file)
 	return Split(content, "\n")
 }
+
+func ReadLayoutFile(filePath string, skipLines int) [][]string {
+	lines := ReadLines(filePath)
+	lines = lines[skipLines:]
+
+	var linesParts [][]string
+	for _, line := range lines {
+		line = Strip(line)
+		if IsEmptyStripStr(line) || StartsWithAnyOf(line, ";", "//") {
+			continue
+		}
+		parts := SplitByAnyOf(line, "&|>:,=")
+		for ind, part := range parts {
+			parts[ind] = Strip(part)
+		}
+		linesParts = append(linesParts, parts)
+	}
+	return linesParts
+}
