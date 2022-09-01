@@ -10,12 +10,12 @@ func GetTypeOfEmptyInterface(value any) string {
 	return reflect.TypeOf(value).String()
 }
 
-func ToEmptyInterface[T BasicType](value T) any {
+func ToEmptyInterface[T any](value T) any {
 	var emptyInterface interface{} = value
 	return emptyInterface
 }
 
-func FromEmptyInterface[T BasicType](value any) T {
+func FromEmptyInterface[T any](value any) T {
 	if converted, ok := value.(T); ok {
 		return converted
 	} else {
@@ -24,7 +24,7 @@ func FromEmptyInterface[T BasicType](value any) T {
 	panic("")
 }
 
-func ConvertToAnyTypeSeq[T BasicType](values ...T) []any {
+func ConvertToAnyTypeSeq[T any](values ...T) []any {
 	var convertedSeq []any
 	for _, value := range values {
 		convertedSeq = append(convertedSeq, ToEmptyInterface(value))
@@ -32,7 +32,7 @@ func ConvertToAnyTypeSeq[T BasicType](values ...T) []any {
 	return convertedSeq
 }
 
-func ConvertFromAnyTypeSeq[T BasicType](values ...any) []T {
+func ConvertFromAnyTypeSeq[T any](values ...any) []T {
 	var convertedSeq []T
 	for _, value := range values {
 		convertedSeq = append(convertedSeq, FromEmptyInterface[T](value))
