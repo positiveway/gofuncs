@@ -2,7 +2,7 @@ package gofuncs
 
 import "math"
 
-func NaN() Float {
+func NaN() float64 {
 	return math.NaN()
 }
 
@@ -22,11 +22,11 @@ func PanicAnyNotPositive[T Number](values ...T) {
 }
 
 func Abs[T SignedNumber](val T) T {
-	return T(math.Abs(Float(val)))
+	return T(math.Abs(float64(val)))
 }
 
 func IsNegative[T SignedNumber](val T) bool {
-	return math.Signbit(Float(val))
+	return math.Signbit(float64(val))
 }
 
 func SignAsInt[T SignedNumber](val T) int {
@@ -55,17 +55,17 @@ func GetIsNegativeAndAbs[T SignedNumber](val T) (bool, T) {
 	return IsNegative(val), Abs(val)
 }
 
-func Trunc[T Number](number Float, precision T) Float {
-	multiplier := math.Pow(10, Float(precision))
+func Trunc[T Number](number float64, precision T) float64 {
+	multiplier := math.Pow(10, float64(precision))
 	return math.Trunc(number*multiplier) / multiplier
 }
 
-func Round[T Number](number Float, precision T) Float {
-	multiplier := math.Pow(10, Float(precision))
+func Round[T Number](number float64, precision T) float64 {
+	multiplier := math.Pow(10, float64(precision))
 	return math.Round(number*multiplier) / multiplier
 }
 
-func FloatToIntRound[T Int](value Float) T {
+func FloatToIntRound[T Int](value float64) T {
 	return T(math.Round(value))
 }
 
@@ -73,6 +73,6 @@ func Sqr[T Number](x T) T {
 	return x * x
 }
 
-func Sqrt[T Number](val T) Float {
-	return math.Sqrt(Float(val))
+func Sqrt[T Number](val T) float64 {
+	return math.Sqrt(float64(val))
 }

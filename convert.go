@@ -53,18 +53,19 @@ func StrToInt(value string) int {
 	return res
 }
 
-func StrToIntToFloat(value string) Float {
-	return Float(StrToInt(value))
+func StrToIntToFloat(value string) float64 {
+	return float64(StrToInt(value))
 }
 
-func CheckSourceIsInt(value float64) float64 {
-	if math.Mod(value, 1) != 0 {
+func CheckSourceIsInt[T Number](value T) float64 {
+	floatValue := float64(value)
+	if math.Mod(floatValue, 1) != 0 {
 		Panic("Value is not Integer")
 	}
-	return value
+	return floatValue
 }
 
-func NumberToPct(value float64) Float {
+func NumberToPct[T Number](value T) float64 {
 	PanicAnyNotPositive(value)
 	return CheckSourceIsInt(value) / 100
 }
@@ -73,11 +74,11 @@ func NumberToPctInPlace(value *float64) {
 	*value = NumberToPct(*value)
 }
 
-func StrToPct(value string) Float {
+func StrToPct(value string) float64 {
 	return NumberToPct(StrToFloat(value))
 }
 
-func StrToFloat(value string) Float {
+func StrToFloat(value string) float64 {
 	res, err := strconv.ParseFloat(value, 64)
 	CheckErr(err)
 	return res
@@ -85,7 +86,7 @@ func StrToFloat(value string) Float {
 
 func NumberToMillis[T Number](value T) time.Duration {
 	PanicAnyNotPositive(value)
-	return time.Duration(Float(value)*1000) * time.Microsecond
+	return time.Duration(float64(value)*1000) * time.Microsecond
 }
 
 func StrToMillis(value string) time.Duration {

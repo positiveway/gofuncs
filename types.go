@@ -12,8 +12,6 @@ type Int interface {
 	SignedInt | UnsignedInt
 }
 
-type Float = float64
-
 type FloatNumber interface {
 	float32 | float64
 }
