@@ -69,6 +69,10 @@ func NumberToPct(value float64) Float {
 	return CheckSourceIsInt(value) / 100
 }
 
+func NumberToPctInPlace(value *float64) {
+	*value = NumberToPct(*value)
+}
+
 func StrToPct(value string) Float {
 	return NumberToPct(StrToFloat(value))
 }
