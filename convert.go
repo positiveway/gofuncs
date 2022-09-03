@@ -1,7 +1,6 @@
 package gofuncs
 
 import (
-	"math"
 	"reflect"
 	"strconv"
 	"time"
@@ -59,9 +58,7 @@ func StrToIntToFloat(value string) float64 {
 
 func CheckSourceIsInt[T Number](value T) float64 {
 	floatValue := float64(value)
-	if math.Mod(floatValue, 1) != 0 {
-		Panic("Value is not Integer")
-	}
+	PanicAnyNotInteger(value)
 	return floatValue
 }
 

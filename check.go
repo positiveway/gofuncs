@@ -44,19 +44,18 @@ func IsNotInitOrEmpty[T BasicType](value T) bool {
 }
 
 func AnyNotInit[T BasicType](values ...T) bool {
-	_, found := IsAnyPredicate(values, IsNotInit[T])
-	return found
+	return IsAnyPredicate(values, IsNotInit[T])
 }
 
 func AnyIsEmpty[T BasicType](values ...T) bool {
-	_, found := IsAnyPredicate(values, IsEmpty[T])
-	return found
+	return IsAnyPredicate(values, IsEmpty[T])
 }
 
 func AnyNotInitOrEmpty[T BasicType](values ...T) bool {
-	_, found := IsAnyPredicate(values, IsNotInitOrEmpty[T])
-	return found
+	return IsAnyPredicate(values, IsNotInitOrEmpty[T])
 }
+
+//var PanicNotInit = GetPanicWithMsg("Value is not initialized")
 
 func PanicNotInit() {
 	Panic("Value is not initialized")
@@ -71,24 +70,30 @@ func PanicNotInitOrEmpty() {
 }
 
 func PanicAnyNotInit[T BasicType](values ...T) {
-	if AnyNotInit(values...) {
-		PanicNotInit()
-	}
+	PanicIfAny(values, IsNotInit[T], PanicNotInit)
 }
 
 func PanicAnyIsEmpty[T BasicType](values ...T) {
-	if AnyIsEmpty(values...) {
-		PanicIsEmpty()
-	}
+	PanicIfAny(values, IsEmpty[T], PanicIsEmpty)
 }
 
 func PanicAnyNotInitOrEmpty[T BasicType](values ...T) {
-	if AnyNotInitOrEmpty(values...) {
-		PanicNotInitOrEmpty()
+	PanicIfAny(values, IsNotInitOrEmpty[T], PanicNotInitOrEmpty)
+}
+
+func GetPanicWithMsg(message string, values ...any) func() {
+	return func() {
+		Panic(message, values...)
 	}
 }
 
-func IsAnyPredicate[T BasicType](values []T, predicate func(value T) bool) (T, bool) {
+func PanicIfAny[T BasicType](values []T, predicate func(value T) bool, panicFunc func()) {
+	if IsAnyPredicate(values, predicate) {
+		panicFunc()
+	}
+}
+
+func IsAnyPredicateWithValue[T BasicType](values []T, predicate func(value T) bool) (T, bool) {
 	for _, value := range values {
 		if predicate(value) {
 			return value, true
@@ -96,6 +101,11 @@ func IsAnyPredicate[T BasicType](values []T, predicate func(value T) bool) (T, b
 	}
 	var emptyRes T
 	return emptyRes, false
+}
+
+func IsAnyPredicate[T BasicType](values []T, predicate func(value T) bool) bool {
+	_, found := IsAnyPredicateWithValue(values, predicate)
+	return found
 }
 
 func AnyCmp[T Number](pairs [][]T, cmp func(val1, val2 T) bool) bool {

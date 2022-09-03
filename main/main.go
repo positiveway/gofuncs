@@ -18,12 +18,20 @@ type Int interface {
 	SignedInt | UnsignedInt
 }
 
-type FloatNumber interface {
+type Float interface {
 	float32 | float64
 }
 
 type SignedNumber interface {
-	SignedInt | FloatNumber
+	SignedInt | Float
+}
+
+type Number interface {
+	Int | Float
+}
+
+type BasicType interface {
+	Number | string | bool | rune
 }
 
 func PanicUnsupportedType(value any) {
@@ -32,7 +40,36 @@ func PanicUnsupportedType(value any) {
 
 type STG string
 
+type Address struct {
+	Street      string
+	HouseNumber int
+}
+
+type Person struct {
+	Address Address
+	Name    string
+}
+
+type University struct {
+	Name    string
+	Student Person
+}
+
+func ToEmptyInterface[T any](value T) any {
+	var emptyInterface interface{} = value
+	return emptyInterface
+}
+
 func main() {
+
+	newUni := University{Student: Person{Address: Address{Street: "Traidmill"}}}
+
+	nextUni := newUni
+	println(nextUni.Student.Address.Street)
+	newUni.Student.Address.Street = "ABC"
+	println(newUni.Student.Address.Street)
+	println(nextUni.Student.Address.Street)
+
 	var c *int
 	c = new(int)
 	*c = 5

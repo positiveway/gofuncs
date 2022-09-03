@@ -16,9 +16,31 @@ func IsNotPositive[T Number](value T) bool {
 }
 
 func PanicAnyNotPositive[T Number](values ...T) {
-	if value, found := IsAnyPredicate(values, IsNotPositive[T]); found {
+	if value, found := IsAnyPredicateWithValue(values, IsNotPositive[T]); found {
 		Panic("Only positive numbers are allowed: %v", value)
 	}
+}
+
+func IsNotInteger[T BasicType](value T) bool {
+	switch ToEmptyInterface(value).(type) {
+	case uint, int, int32, int64, float32, float64:
+		return math.Mod(FromEmptyInterface[float64](value), 1) != 0
+	default:
+		PanicUnsupportedType(value)
+	}
+	panic("")
+}
+
+func PanicNotInteger() {
+	Panic("Value is not Integer")
+}
+
+func AnyNotInteger[T BasicType](values ...T) bool {
+	return IsAnyPredicate(values, IsNotInteger[T])
+}
+
+func PanicAnyNotInteger[T BasicType](values ...T) {
+	PanicIfAny(values, IsNotInteger[T], PanicNotInteger)
 }
 
 func Abs[T SignedNumber](val T) T {
