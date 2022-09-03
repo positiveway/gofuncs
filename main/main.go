@@ -40,8 +40,11 @@ func main() {
 	*c = 5
 
 	var b STG = "0"
-	print(b)
+	println(b)
 
 	var a = math.NaN()
-	print(a >= 0)
+	println(a >= 0)
+
+	g := 5.5
+	println(math.Mod(g, 1) != 0)
 }

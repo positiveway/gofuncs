@@ -1,6 +1,7 @@
 package gofuncs
 
 import (
+	"math"
 	"reflect"
 	"strconv"
 	"time"
@@ -56,12 +57,20 @@ func StrToIntToFloat(value string) Float {
 	return Float(StrToInt(value))
 }
 
-func NumberToPct(value int) Float {
-	return float64(value) / 100
+func CheckSourceIsInt(value float64) float64 {
+	if math.Mod(value, 1) != 0 {
+		Panic("Value is not Integer")
+	}
+	return value
+}
+
+func NumberToPct(value float64) Float {
+	PanicAnyNotPositive(value)
+	return CheckSourceIsInt(value) / 100
 }
 
 func StrToPct(value string) Float {
-	return StrToIntToFloat(value) / 100
+	return NumberToPct(StrToFloat(value))
 }
 
 func StrToFloat(value string) Float {
@@ -71,6 +80,7 @@ func StrToFloat(value string) Float {
 }
 
 func NumberToMillis[T Number](value T) time.Duration {
+	PanicAnyNotPositive(value)
 	return time.Duration(Float(value)*1000) * time.Microsecond
 }
 
