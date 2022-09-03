@@ -12,16 +12,16 @@ type Int interface {
 	SignedInt | UnsignedInt
 }
 
-type FloatNumber interface {
+type Float interface {
 	float32 | float64
 }
 
 type SignedNumber interface {
-	SignedInt | FloatNumber
+	SignedInt | Float
 }
 
 type Number interface {
-	Int | FloatNumber
+	Int | Float
 }
 
 type BasicType interface {
