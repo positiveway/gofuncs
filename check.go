@@ -35,6 +35,11 @@ func IsNotInit(value interface{}) bool {
 }
 
 func IsEmpty(value interface{}) bool {
+	//NEVER use multiple types in one case.
+	//In that scenario they are not treated as primitive types
+	//but as an empty interface encapsulating a primitive type.
+	//Basic comparison operations will not work because of that
+
 	switch v := value.(type) {
 	case float32:
 		return v == 0.0
