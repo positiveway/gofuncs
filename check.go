@@ -9,11 +9,15 @@ func PanicUnsupportedType(value any) {
 }
 
 func GetValueOrDefaultIfEmpty[T BasicType](value, defaultVal T) T {
-	if IsNotInitOrEmpty(value) {
+	if IsEmptyOrNotInit(value) {
 		return defaultVal
 	} else {
 		return value
 	}
+}
+
+func SetDefaultIfValueIsEmpty[T BasicType](value *T, defaultVal T) {
+	*value = GetValueOrDefaultIfEmpty(*value, defaultVal)
 }
 
 func IsNotInit[T BasicType](value T) bool {
@@ -42,7 +46,7 @@ func IsEmpty[T BasicType](value T) bool {
 	return false
 }
 
-func IsNotInitOrEmpty[T BasicType](value T) bool {
+func IsEmptyOrNotInit[T BasicType](value T) bool {
 	switch ToEmptyInterface(value).(type) {
 	case float32, float64:
 		return IsNotInit(value) || IsEmpty(value)
@@ -59,8 +63,8 @@ func AnyIsEmpty[T BasicType](values ...T) bool {
 	return IsAnyPredicate(values, IsEmpty[T])
 }
 
-func AnyNotInitOrEmpty[T BasicType](values ...T) bool {
-	return IsAnyPredicate(values, IsNotInitOrEmpty[T])
+func AnyEmptyOrNotInit[T BasicType](values ...T) bool {
+	return IsAnyPredicate(values, IsEmptyOrNotInit[T])
 }
 
 //var PanicNotInit = GetPanicWithMsg("Value is not initialized")
@@ -73,7 +77,7 @@ func PanicIsEmpty() {
 	Panic("Value is empty")
 }
 
-func PanicNotInitOrEmpty() {
+func PanicEmptyOrNotInit() {
 	Panic("Value is not initialized or is empty")
 }
 
@@ -85,8 +89,8 @@ func PanicAnyIsEmpty[T BasicType](values ...T) {
 	PanicIfAny(values, IsEmpty[T], PanicIsEmpty)
 }
 
-func PanicAnyNotInitOrEmpty[T BasicType](values ...T) {
-	PanicIfAny(values, IsNotInitOrEmpty[T], PanicNotInitOrEmpty)
+func PanicAnyEmptyOrNotInit[T BasicType](values ...T) {
+	PanicIfAny(values, IsEmptyOrNotInit[T], PanicEmptyOrNotInit)
 }
 
 func GetPanicWithMsg(message string, values ...any) func() {
