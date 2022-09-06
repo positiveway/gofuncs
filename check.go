@@ -56,15 +56,15 @@ func IsEmptyOrNotInit(value interface{}) bool {
 }
 
 func AnyNotInit[T BasicType](values ...T) bool {
-	return IsAnyPredicate(values, IsNotInit[T])
+	return IsAnyPredicate(values, IsNotInit)
 }
 
 func AnyIsEmpty[T BasicType](values ...T) bool {
-	return IsAnyPredicate(values, IsEmpty[T])
+	return IsAnyPredicate(values, IsEmpty)
 }
 
 func AnyEmptyOrNotInit[T BasicType](values ...T) bool {
-	return IsAnyPredicate(values, IsEmptyOrNotInit[T])
+	return IsAnyPredicate(values, IsEmptyOrNotInit)
 }
 
 //var PanicNotInit = GetPanicWithMsg("Value is not initialized")
@@ -82,15 +82,15 @@ func PanicEmptyOrNotInit() {
 }
 
 func PanicAnyNotInit[T BasicType](values ...T) {
-	PanicIfAny(values, IsNotInit[T], PanicNotInit)
+	PanicIfAny(values, IsNotInit, PanicNotInit)
 }
 
 func PanicAnyIsEmpty[T BasicType](values ...T) {
-	PanicIfAny(values, IsEmpty[T], PanicIsEmpty)
+	PanicIfAny(values, IsEmpty, PanicIsEmpty)
 }
 
 func PanicAnyEmptyOrNotInit[T BasicType](values ...T) {
-	PanicIfAny(values, IsEmptyOrNotInit[T], PanicEmptyOrNotInit)
+	PanicIfAny(values, IsEmptyOrNotInit, PanicEmptyOrNotInit)
 }
 
 func GetPanicWithMsg(message string, values ...any) func() {
