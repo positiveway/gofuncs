@@ -10,35 +10,36 @@ func GetTypeOfEmptyInterface(value any) string {
 	return reflect.TypeOf(value).String()
 }
 
-func ToEmptyInterface[T any](value T) any {
-	var emptyInterface interface{} = value
-	return emptyInterface
-}
-
-func FromEmptyInterface[T any](value any) T {
-	if converted, ok := value.(T); ok {
-		return converted
-	} else {
-		Panic("Conversion of type \"%s\" failed", GetTypeOfEmptyInterface(value))
-	}
-	panic("")
-}
-
-func ConvertToAnyTypeSeq[T any](values ...T) []any {
-	var convertedSeq []any
-	for _, value := range values {
-		convertedSeq = append(convertedSeq, ToEmptyInterface(value))
-	}
-	return convertedSeq
-}
-
-func ConvertFromAnyTypeSeq[T any](values ...any) []T {
-	var convertedSeq []T
-	for _, value := range values {
-		convertedSeq = append(convertedSeq, FromEmptyInterface[T](value))
-	}
-	return convertedSeq
-}
+//
+//func ToEmptyInterface[T any](value T) any {
+//	var emptyInterface interface{} = value
+//	return emptyInterface
+//}
+//
+//func FromEmptyInterface[T any](value any) T {
+//	if converted, ok := value.(T); ok {
+//		return converted
+//	} else {
+//		Panic("Conversion of type \"%s\" failed", GetTypeOfEmptyInterface(value))
+//	}
+//	panic("")
+//}
+//
+//func ConvertToAnyTypeSeq[T any](values ...T) []any {
+//	var convertedSeq []any
+//	for _, value := range values {
+//		convertedSeq = append(convertedSeq, ToEmptyInterface(value))
+//	}
+//	return convertedSeq
+//}
+//
+//func ConvertFromAnyTypeSeq[T any](values ...any) []T {
+//	var convertedSeq []T
+//	for _, value := range values {
+//		convertedSeq = append(convertedSeq, FromEmptyInterface[T](value))
+//	}
+//	return convertedSeq
+//}
 
 func StrToBool(value string) bool {
 	res, err := strconv.ParseBool(value)

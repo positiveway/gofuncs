@@ -20,32 +20,34 @@ func SetDefaultIfValueIsEmpty[T BasicType](value *T, defaultVal T) {
 	*value = GetValueOrDefaultIfEmpty(*value, defaultVal)
 }
 
-func IsNotInit[T BasicType](value T) bool {
-	switch v := ToEmptyInterface(value).(type) {
-	case float32, float64:
-		return math.IsNaN(FromEmptyInterface[float64](v))
+func IsNotInit(value interface{}) bool {
+	switch v := value.(type) {
+	case float32:
+		return math.IsNaN(float64(v))
+	case float64:
+		return math.IsNaN(v)
 	case string:
-		return FromEmptyInterface[string](v) == ""
+		return (v) == ""
 	default:
 		PanicUnsupportedType(value)
 	}
 	return false
 }
 
-func IsEmpty[T BasicType](value T) bool {
-	switch v := ToEmptyInterface(value).(type) {
+func IsEmpty(value interface{}) bool {
+	switch v := value.(type) {
 	case float32, float64, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
-		return FromEmptyInterface[float64](v) == 0 //Todo:check float overflow from int64
+		return v == 0
 	case string:
-		return IsEmptyStripStr(FromEmptyInterface[string](v))
+		return IsEmptyStripStr(v)
 	default:
 		PanicUnsupportedType(value)
 	}
 	return false
 }
 
-func IsEmptyOrNotInit[T BasicType](value T) bool {
-	switch ToEmptyInterface(value).(type) {
+func IsEmptyOrNotInit(value interface{}) bool {
+	switch value.(type) {
 	case float32, float64:
 		return IsNotInit(value) || IsEmpty(value)
 	default:
@@ -97,13 +99,13 @@ func GetPanicWithMsg(message string, values ...any) func() {
 	}
 }
 
-func PanicIfAny[T BasicType](values []T, predicate func(value T) bool, panicFunc func()) {
+func PanicIfAny[T BasicType](values []T, predicate func(value interface{}) bool, panicFunc func()) {
 	if IsAnyPredicate(values, predicate) {
 		panicFunc()
 	}
 }
 
-func IsAnyPredicateWithValue[T BasicType](values []T, predicate func(value T) bool) (T, bool) {
+func IsAnyPredicateWithValue[T BasicType](values []T, predicate func(value interface{}) bool) (T, bool) {
 	for _, value := range values {
 		if predicate(value) {
 			return value, true
@@ -113,7 +115,7 @@ func IsAnyPredicateWithValue[T BasicType](values []T, predicate func(value T) bo
 	return emptyRes, false
 }
 
-func IsAnyPredicate[T BasicType](values []T, predicate func(value T) bool) bool {
+func IsAnyPredicate[T BasicType](values []T, predicate func(value interface{}) bool) bool {
 	_, found := IsAnyPredicateWithValue(values, predicate)
 	return found
 }

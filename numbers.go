@@ -6,12 +6,28 @@ func NaN() float64 {
 	return math.NaN()
 }
 
-func IsPositive[T Number](value T) bool {
+func IsPositive(value interface{}) bool {
+	switch v := value.(type) {
 	// Nan > 0 is false
-	return value > 0
+	case float32:
+		return v > 0
+	case float64:
+		return v > 0
+	case int:
+		return v > 0
+	case int32:
+		return v > 0
+	case int64:
+		return v > 0
+	case uint:
+		return v > 0
+	default:
+		PanicUnsupportedType(value)
+	}
+	panic("")
 }
 
-func IsNotPositive[T Number](value T) bool {
+func IsNotPositive(value interface{}) bool {
 	return !IsPositive(value)
 }
 
@@ -21,10 +37,14 @@ func PanicAnyNotPositive[T Number](values ...T) {
 	}
 }
 
-func IsNotInteger[T BasicType](value T) bool {
-	switch ToEmptyInterface(value).(type) {
-	case uint, int, int32, int64, float32, float64:
-		return math.Mod(FromEmptyInterface[float64](value), 1) != 0
+func IsNotInteger(value interface{}) bool {
+	switch v := value.(type) {
+	case uint, int, int32, int64:
+		return false
+	case float32:
+		return math.Mod(float64(v), 1) != 0
+	case float64:
+		return math.Mod(v, 1) != 0
 	default:
 		PanicUnsupportedType(value)
 	}
