@@ -46,7 +46,7 @@ type Address struct {
 }
 
 type Person struct {
-	Address Address
+	Address *Address
 	Name    string
 }
 
@@ -62,7 +62,7 @@ func ToEmptyInterface[T any](value T) any {
 
 func main() {
 
-	newUni := University{Student: Person{Address: Address{Street: "Traidmill"}}}
+	newUni := University{Student: Person{Address: &Address{Street: "Traidmill"}}}
 
 	nextUni := newUni
 	println(nextUni.Student.Address.Street)

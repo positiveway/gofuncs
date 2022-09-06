@@ -8,6 +8,14 @@ func PanicUnsupportedType(value any) {
 	Panic("Type \"%s\" is not supported", GetTypeOfEmptyInterface(value))
 }
 
+func GetValueOrDefaultIfEmpty[T BasicType](value, defaultVal T) T {
+	if IsNotInitOrEmpty(value) {
+		return defaultVal
+	} else {
+		return value
+	}
+}
+
 func IsNotInit[T BasicType](value T) bool {
 	switch v := ToEmptyInterface(value).(type) {
 	case float32:
