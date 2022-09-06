@@ -10,16 +10,28 @@ func IsPositive(value interface{}) bool {
 	switch v := value.(type) {
 	// Nan > 0 is false
 	case float32:
-		return v > 0
+		return v > 0.0
 	case float64:
-		return v > 0
+		return v > 0.0
 	case int:
+		return v > 0
+	case int8:
+		return v > 0
+	case int16:
 		return v > 0
 	case int32:
 		return v > 0
 	case int64:
 		return v > 0
 	case uint:
+		return v > 0
+	case uint8:
+		return v > 0
+	case uint16:
+		return v > 0
+	case uint32:
+		return v > 0
+	case uint64:
 		return v > 0
 	default:
 		PanicUnsupportedType(value)
@@ -39,12 +51,30 @@ func PanicAnyNotPositive[T Number](values ...T) {
 
 func IsNotInteger(value interface{}) bool {
 	switch v := value.(type) {
-	case uint, int, int32, int64:
-		return false
 	case float32:
 		return math.Mod(float64(v), 1) != 0
 	case float64:
 		return math.Mod(v, 1) != 0
+	case int:
+		return false
+	case int8:
+		return false
+	case int16:
+		return false
+	case int32:
+		return false
+	case int64:
+		return false
+	case uint:
+		return false
+	case uint8:
+		return false
+	case uint16:
+		return false
+	case uint32:
+		return false
+	case uint64:
+		return false
 	default:
 		PanicUnsupportedType(value)
 	}
