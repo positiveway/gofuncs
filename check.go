@@ -22,14 +22,12 @@ func SetDefaultIfValueIsEmpty[T BasicType](value *T, defaultVal T) {
 
 func IsNotInit[T BasicType](value T) bool {
 	switch v := ToEmptyInterface(value).(type) {
-	case float32:
-		return math.IsNaN(float64(v))
-	case float64:
-		return math.IsNaN(v)
+	case float32, float64:
+		return math.IsNaN(FromEmptyInterface[float64](v))
 	case string:
-		return v == ""
+		return FromEmptyInterface[string](v) == ""
 	default:
-		PanicUnsupportedType(v)
+		PanicUnsupportedType(value)
 	}
 	return false
 }
@@ -37,11 +35,11 @@ func IsNotInit[T BasicType](value T) bool {
 func IsEmpty[T BasicType](value T) bool {
 	switch v := ToEmptyInterface(value).(type) {
 	case float32, float64, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
-		return v == 0
+		return FromEmptyInterface[float64](v) == 0 //Todo:check float overflow from int64
 	case string:
-		return IsEmptyStripStr(v)
+		return IsEmptyStripStr(FromEmptyInterface[string](v))
 	default:
-		PanicUnsupportedType(v)
+		PanicUnsupportedType(value)
 	}
 	return false
 }
