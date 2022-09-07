@@ -68,7 +68,7 @@ func PanicDuplicate[V comparable](value V, optionalMessage ...string) {
 	if !IsNotInit(message) {
 		message += " "
 	}
-	Panic("Duplicate %sfound: %v", value)
+	Panic("Duplicate %sfound: %v", message, value)
 }
 
 func PanicIfDuplicateInList[V comparable](values []V, optionalMessage ...string) {
