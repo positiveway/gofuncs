@@ -13,9 +13,9 @@ func AssignWithDuplicateKeyCheck[K comparable, V any](mapping map[K]V, key K, va
 	mapping[key] = val
 }
 
-func AssignWithDuplicateKeyValueCheck[K, V comparable](mapping map[K]V, key K, val V) {
+func AssignWithDuplicateKeyValueCheck[K, V comparable](mapping map[K]V, key K, val V, ignoreEmptyVal bool) {
 	AssignWithDuplicateKeyCheck(mapping, key, val)
-	PanicIfDuplicateValueInMap(mapping)
+	PanicIfDuplicateValueInMap(mapping, ignoreEmptyVal)
 }
 
 func GetOrDefault[K comparable, V any](mapping map[K]V, key K, defaultVal V) V {
@@ -49,11 +49,14 @@ func CheckLengthSlice[T any](seq []T, length int) {
 	}
 }
 
-func IsDuplicateInList[V comparable](values []V) (V, bool) {
+func IsDuplicateInList[V comparable](values []V, ignoreEmptyVal bool) (V, bool) {
 	var emptyResValue V
 	countingMap := map[V]uint{}
 
 	for _, value := range values {
+		if ignoreEmptyVal && value == emptyResValue {
+			continue
+		}
 		countingMap[value]++
 		if countingMap[value] > 1 {
 			return value, true
@@ -71,22 +74,22 @@ func PanicDuplicate[V comparable](value V, optionalMessage ...string) {
 	Panic("Duplicate %sfound: %v", message, value)
 }
 
-func PanicIfDuplicateInList[V comparable](values []V, optionalMessage ...string) {
-	if duplicateVal, found := IsDuplicateInList(values); found {
+func PanicIfDuplicateInList[V comparable](values []V, ignoreEmptyVal bool, optionalMessage ...string) {
+	if duplicateVal, found := IsDuplicateInList(values, ignoreEmptyVal); found {
 		PanicDuplicate(duplicateVal, "value")
 	}
 }
 
-func IsDuplicateValueInMap[K, V comparable](mapping map[K]V) (V, bool) {
+func IsDuplicateValueInMap[K, V comparable](mapping map[K]V, ignoreEmptyVal bool) (V, bool) {
 	var values []V
 	for _, value := range mapping {
 		values = append(values, value)
 	}
-	return IsDuplicateInList(values)
+	return IsDuplicateInList(values, ignoreEmptyVal)
 }
 
-func PanicIfDuplicateValueInMap[K, V comparable](mapping map[K]V) {
-	if duplicateVal, found := IsDuplicateValueInMap(mapping); found {
+func PanicIfDuplicateValueInMap[K, V comparable](mapping map[K]V, ignoreEmptyVal bool) {
+	if duplicateVal, found := IsDuplicateValueInMap(mapping, ignoreEmptyVal); found {
 		PanicDuplicate(duplicateVal, "value")
 	}
 }
