@@ -8,7 +8,7 @@ func Pop[K comparable, V any](m map[K]V, key K) V {
 
 func AssignWithDuplicateCheck[K comparable, V any](m map[K]V, key K, val V) {
 	if _, found := m[key]; found {
-		Panic("duplicate position")
+		PanicDuplicate(key)
 	}
 	m[key] = val
 }
@@ -42,6 +42,40 @@ func CheckLengthSlice[T any](seq []T, length int) {
 	if len(seq) < length {
 		Panic("Length of sequence should be at least %v", length)
 	}
+}
+
+func IsDuplicateInList[V comparable](values []V) (V, bool) {
+	var emptyResValue V
+	countingMap := map[V]uint{}
+
+	for _, value := range values {
+		countingMap[value]++
+		if countingMap[value] > 1 {
+			return value, true
+		}
+	}
+	return emptyResValue, false
+}
+
+func PanicDuplicate[V comparable](value V) {
+	Panic("Duplicate found: %v", value)
+}
+
+func PanicIfDuplicateInList[V comparable](values []V) {
+	if duplicateVal, found := IsDuplicateInList(values); found {
+		PanicDuplicate(duplicateVal)
+	}
+}
+
+func PanicIfDuplicateKeyOrValue[K, V comparable](seq map[K]V) {
+	var keysList []K
+	var valuesList []V
+	for key, value := range seq {
+		keysList = append(keysList, key)
+		valuesList = append(valuesList, value)
+	}
+	PanicIfDuplicateInList(keysList)
+	PanicIfDuplicateInList(valuesList)
 }
 
 func IsEmptyMap[K comparable, V any](seq map[K]V) bool {
