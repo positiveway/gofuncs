@@ -45,9 +45,7 @@ func (m *Map[K, V]) RangeOverDeepCopy(elementHandler func(key K, value V)) {
 }
 
 func (m *Map[K, V]) Pop(key K) V {
-	value := m.mapping[key]
-	delete(m.mapping, key)
-	return value
+	return Pop(m.mapping, key)
 }
 
 type ThreadSafeMap[K comparable, V any] struct {
@@ -109,7 +107,5 @@ func (threadMap *ThreadSafeMap[K, V]) Pop(key K) V {
 	threadMap.mutex.Lock()
 	defer threadMap.mutex.Unlock()
 
-	value := threadMap.mapping[key]
-	delete(threadMap.mapping, key)
-	return value
+	return Pop(threadMap.mapping, key)
 }
