@@ -1,28 +1,33 @@
 package gofuncs
 
-func Pop[K comparable, V any](m map[K]V, key K) V {
-	value := m[key]
-	delete(m, key)
+func Pop[K comparable, V any](mapping map[K]V, key K) V {
+	value := mapping[key]
+	delete(mapping, key)
 	return value
 }
 
-func AssignWithDuplicateCheck[K comparable, V any](m map[K]V, key K, val V) {
-	if _, found := m[key]; found {
-		PanicDuplicate(key)
+func AssignWithDuplicateKeyCheck[K comparable, V any](mapping map[K]V, key K, val V) {
+	if _, found := mapping[key]; found {
+		PanicDuplicate(key, "key")
 	}
-	m[key] = val
+	mapping[key] = val
 }
 
-func GetOrDefault[K comparable, V any](m map[K]V, key K, defaultVal V) V {
-	if val, found := m[key]; found {
+func AssignWithDuplicateKeyValueCheck[K, V comparable](mapping map[K]V, key K, val V) {
+	AssignWithDuplicateKeyCheck(mapping, key, val)
+	PanicIfDuplicateValueInMap(mapping)
+}
+
+func GetOrDefault[K comparable, V any](mapping map[K]V, key K, defaultVal V) V {
+	if val, found := mapping[key]; found {
 		return val
 	} else {
 		return defaultVal
 	}
 }
 
-func GetOrPanic[K comparable, V any](m map[K]V, key K, msg ...string) V {
-	if val, found := m[key]; found {
+func GetOrPanic[K comparable, V any](mapping map[K]V, key K, msg ...string) V {
+	if val, found := mapping[key]; found {
 		return val
 	}
 	message := GetPanicMsg(msg, "No such key in map")
@@ -57,34 +62,42 @@ func IsDuplicateInList[V comparable](values []V) (V, bool) {
 	return emptyResValue, false
 }
 
-func PanicDuplicate[V comparable](value V) {
-	Panic("Duplicate found: %v", value)
+func PanicDuplicate[V comparable](value V, optionalMessage ...string) {
+	message := GetPanicMsg(optionalMessage, "")
+	message = Strip(message)
+	if !IsNotInit(message) {
+		message += " "
+	}
+	Panic("Duplicate %sfound: %v", value)
 }
 
-func PanicIfDuplicateInList[V comparable](values []V) {
+func PanicIfDuplicateInList[V comparable](values []V, optionalMessage ...string) {
 	if duplicateVal, found := IsDuplicateInList(values); found {
-		PanicDuplicate(duplicateVal)
+		PanicDuplicate(duplicateVal, "value")
 	}
 }
 
-func PanicIfDuplicateKeyOrValue[K, V comparable](seq map[K]V) {
-	var keysList []K
-	var valuesList []V
-	for key, value := range seq {
-		keysList = append(keysList, key)
-		valuesList = append(valuesList, value)
+func IsDuplicateValueInMap[K, V comparable](mapping map[K]V) (V, bool) {
+	var values []V
+	for _, value := range mapping {
+		values = append(values, value)
 	}
-	PanicIfDuplicateInList(keysList)
-	PanicIfDuplicateInList(valuesList)
+	return IsDuplicateInList(values)
 }
 
-func IsEmptyMap[K comparable, V any](seq map[K]V) bool {
-	return len(seq) == 0
+func PanicIfDuplicateValueInMap[K, V comparable](mapping map[K]V) {
+	if duplicateVal, found := IsDuplicateValueInMap(mapping); found {
+		PanicDuplicate(duplicateVal, "value")
+	}
 }
 
-func ShallowCopyMap[K comparable, V any](seq map[K]V) map[K]V {
+func IsEmptyMap[K comparable, V any](mapping map[K]V) bool {
+	return len(mapping) == 0
+}
+
+func ShallowCopyMap[K comparable, V any](mapping map[K]V) map[K]V {
 	copied := map[K]V{}
-	for key, val := range seq {
+	for key, val := range mapping {
 		copied[key] = val
 	}
 	return copied
