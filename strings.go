@@ -140,12 +140,15 @@ func AnyValuesToStr(values ...interface{}) []string {
 	return strList
 }
 
-func ToLower(values ...interface{}) []string {
+func ToLowerAnyValue(value interface{}) string {
+	return strings.ToLower(AnyValueToStr(value))
+}
+
+func ToLowerAnyValues(values ...interface{}) []string {
 	var loweredValues []string
 
-	for _, strValue := range AnyValuesToStr(values) {
-		loweredValues = append(loweredValues,
-			strings.ToLower(strValue))
+	for _, value := range values {
+		loweredValues = append(loweredValues, ToLowerAnyValue(value))
 	}
 	return loweredValues
 }
