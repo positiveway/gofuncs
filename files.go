@@ -31,24 +31,24 @@ func CheckFileOrDirExists(filePath string) {
 	}
 }
 
-func JoinPathCheckIfExists(elem ...string) string {
-	filePath := filepath.Join(elem...)
+func JoinPathCheckIfExists(pathFragments ...string) string {
+	filePath := filepath.Join(pathFragments...)
 	CheckFileOrDirExists(filePath)
 	return filePath
 }
 
-func ReadFile[T EncodingT](elem ...string) T {
-	data, err := os.ReadFile(JoinPathCheckIfExists(elem...))
+func ReadFile[T EncodingT](pathFragments ...string) T {
+	data, err := os.ReadFile(JoinPathCheckIfExists(pathFragments...))
 	CheckErr(err)
 	return T(data)
 }
 
-func ReadFileStr(elem ...string) string {
-	return ReadFile[string](elem...)
+func ReadFileStr(pathFragments ...string) string {
+	return ReadFile[string](pathFragments...)
 }
 
-func ReadJson(res interface{}, elem []string) {
-	filePath := JoinPathCheckIfExists(elem...)
+func ReadJson(res interface{}, pathFragments []string) {
+	filePath := JoinPathCheckIfExists(pathFragments...)
 
 	if !EndsWith(filePath, ".json") {
 		Panic("Invalid file extension")
@@ -64,13 +64,13 @@ func ReadJson(res interface{}, elem []string) {
 	}
 }
 
-func ReadLines(elem ...string) []string {
-	content := ReadFileStr(elem...)
+func ReadLines(pathFragments ...string) []string {
+	content := ReadFileStr(pathFragments...)
 	return Split(content, "\n")
 }
 
-func ReadLayoutFile(skipLines int, elem []string) [][]string {
-	lines := ReadLines(elem...)
+func ReadLayoutFile(skipLines int, pathFragments []string) [][]string {
+	lines := ReadLines(pathFragments...)
 	lines = lines[skipLines:]
 
 	var linesParts [][]string

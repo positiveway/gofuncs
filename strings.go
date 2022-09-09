@@ -1,6 +1,7 @@
 package gofuncs
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -126,10 +127,25 @@ func StripOrPanicIfEmpty(s string) string {
 	return s
 }
 
-func ToLower(elem ...string) []string {
-	var lowered []string
-	for _, el := range elem {
-		lowered = append(lowered, strings.ToLower(el))
+func AnyValueToStr(value interface{}) string {
+	return fmt.Sprintf("%v", value)
+}
+
+func AnyValuesToStr(values ...interface{}) []string {
+	var strList []string
+
+	for _, value := range values {
+		strList = append(strList, AnyValueToStr(value))
 	}
-	return lowered
+	return strList
+}
+
+func ToLower(values ...interface{}) []string {
+	var loweredValues []string
+
+	for _, strValue := range AnyValuesToStr(values) {
+		loweredValues = append(loweredValues,
+			strings.ToLower(strValue))
+	}
+	return loweredValues
 }
