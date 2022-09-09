@@ -127,7 +127,7 @@ func StripOrPanicIfEmpty(s string) string {
 	return s
 }
 
-func AnyValueToStr(value interface{}) string {
+func AnyToStr(value interface{}) string {
 	return fmt.Sprintf("%v", value)
 }
 
@@ -135,20 +135,30 @@ func AnyValuesToStr(values ...interface{}) []string {
 	var strList []string
 
 	for _, value := range values {
-		strList = append(strList, AnyValueToStr(value))
+		strList = append(strList, AnyToStr(value))
 	}
 	return strList
 }
 
-func ToLowerAnyValue(value interface{}) string {
-	return strings.ToLower(AnyValueToStr(value))
+func ToLower(value interface{}) string {
+	return strings.ToLower(AnyToStr(value))
 }
 
-func ToLowerAnyValues(values ...interface{}) []string {
+func ToLowerValues(values ...interface{}) []string {
 	var loweredValues []string
 
 	for _, value := range values {
-		loweredValues = append(loweredValues, ToLowerAnyValue(value))
+		loweredValues = append(loweredValues, ToLower(value))
 	}
 	return loweredValues
+}
+
+func ToLowerAndStrip(value interface{}) string {
+	return Strip(ToLower(value))
+}
+
+func ToLowerAndStripPanicIfEmpty(value interface{}) string {
+	res := ToLowerAndStrip(value)
+	PanicIfEmptyStripStr(res)
+	return res
 }
