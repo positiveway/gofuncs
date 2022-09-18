@@ -158,7 +158,19 @@ func ToLowerAndStrip(value interface{}) string {
 }
 
 func ToLowerAndStripPanicIfEmpty(value interface{}) string {
-	res := ToLowerAndStrip(value)
-	PanicIfEmptyStripStr(res)
-	return res
+	loweredAndStrip := ToLowerAndStrip(value)
+	PanicIfEmptyStripStr(loweredAndStrip)
+	return loweredAndStrip
+}
+
+func PanicIfSpaces(value string) {
+	if value != Strip(value) {
+		Panic("String can't contain spaces: \"%s\"", value)
+	}
+}
+
+func ToLowerPanicIfSpaces(value interface{}) string {
+	lowered := ToLower(value)
+	PanicIfSpaces(lowered)
+	return lowered
 }
