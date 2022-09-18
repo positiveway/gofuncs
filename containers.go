@@ -40,6 +40,12 @@ func IsEmptySlice[T any](seq []T) bool {
 	return len(seq) == 0
 }
 
+func PanicIfEmptySlice[T any](seq []T) {
+	if IsEmptySlice(seq) {
+		Panic("Slice is empty")
+	}
+}
+
 func CheckLengthSlice[T any](seq []T, length int) {
 	if !IsPositive(length) {
 		Panic("length parameter is incorrect: %v", length)
@@ -109,6 +115,16 @@ func ShallowCopyMap[K comparable, V any](mapping map[K]V) map[K]V {
 func LastElem[T any](seq []T) T {
 	CheckLengthSlice(seq, 1)
 	return seq[len(seq)-1]
+}
+
+func AppendToSlice[T BasicType](seq []T, values ...T) []T {
+	PanicIfEmptySlice(seq)
+
+	for _, value := range values {
+		seq = append(seq, value)
+	}
+
+	return seq
 }
 
 func Reverse[T BasicType](seq []T) []T {
