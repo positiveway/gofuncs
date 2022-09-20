@@ -102,9 +102,17 @@ func IsNegative[T SignedNumber](val T) bool {
 }
 
 func SignAsInt[T SignedNumber](val T) int {
-	if IsNotInit(val) || val == 0 {
+	var emptyInterface interface{} = val
+	switch emptyInterface.(type) {
+	case float32, float64:
+		if IsNotInit(val) {
+			return 0
+		}
+	}
+	if val == 0 {
 		return 0
 	}
+
 	res := 1
 	if IsNegative(val) {
 		res *= -1
